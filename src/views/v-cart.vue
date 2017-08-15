@@ -117,8 +117,16 @@
 				this.getCartList();
 			}
 		},
+		beforeDestroy() {
+			alert(11)
+		},
+		beforeRouteUpdate (to, from, next) {
+			alert(2222)
+
+		},
 		watch: {
 			loginUserId(){
+				console.log(1123)
 				this.getCartList();
 			}
 		},	

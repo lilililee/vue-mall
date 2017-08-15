@@ -10,9 +10,9 @@
 				<a href="javascript:" class="username" v-show="isLogin"><i class="iconfont icon-yonghu"></i>{{loginUserId}}</a>
 				<a href="javascript:" class="login" v-show="!isLogin" @click="isShowLoginModal=true;isShowLoginTips=false;">登录</a>
 				<a href="javascript:" class="logout" @click="isShowExitModal=true" v-show="isLogin">退出</a>
-				<router-link to="/cart" class="cart">
+				<a href="javascript:"  class="cart" @click="toCart">
 					<i class="iconfont icon-gouwucheshoppingcart"></i>
-				</router-link>
+				</a>
 
 
 			</div>
@@ -54,6 +54,15 @@
 					
 				</div>
 			</v-modal>
+
+			<v-modal :isShow.sync="isShowNotLoginModal" class="md-not-login">
+				<div slot="msg" class="md-msg">
+					您当前未登录！
+				</div>
+				<div slot="btns" class="md-btns">
+					<a href="javascript:" class="md-btn-defult" @click="isShowNotLoginModal=false">确认</a>
+				</div>
+			</v-modal>
 		</div>
 	</header>
 </template>
@@ -70,7 +79,8 @@
 				password: '123456',
 				isShowLoginModal: false,
 				isShowLoginTips: false,
-				isShowExitModal: false
+				isShowExitModal: false,
+				isShowNotLoginModal: false
 				
 			}
 		},
@@ -116,6 +126,13 @@
 						
 					}
 				})
+			},
+			toCart(){
+				if (this.isLogin) {
+					this.$router.push('cart')
+				} else {
+					this.isShowNotLoginModal = true;
+				}
 			}
 			
 
@@ -151,9 +168,7 @@
 
 			}
 
-			.login {
-				font-size: 16px;			
-			}
+		
 
 			.cart {
 				i {

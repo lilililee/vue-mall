@@ -30,7 +30,9 @@
 
 		a {
 			@include transition;
-
+			&:first-child{
+				margin-left: 11px;
+			}
 			&:hover {
 				color: $c1;
 			}

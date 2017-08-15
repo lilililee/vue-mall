@@ -11,12 +11,16 @@ export default new Router({
   {
     path: '/cart',
     name: 'VCart',
-    component: VCart
+    component: VCart,
+    meta: {
+      requireAuth: true
+    } 
   },
   {
     path: '/*',
     name: 'VGoodsList',
     component: VGoodsList
+
   }
 
   ]
