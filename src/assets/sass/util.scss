@@ -1,0 +1,113 @@
+// 主体颜色
+$c1: #d1434a;
+$c2: #ee7a23;
+
+
+$color-primary: #337ab7;
+$color-success: #3c763d;
+$color-info: #31708f;
+$color-warning: #8a6d3b;
+$color-danger: #a94442;
+
+
+// 过渡方法 
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+// 常用mixin
+// 1.布局
+@mixin clearfix {
+ &:before,
+ &:after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+}
+}
+
+@mixin textCenter($height:40px){
+  line-height: $height;
+  height: $height;
+  text-align: center;
+}
+
+@mixin flexCenter {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  //垂直居中
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  //水平居中
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+
+@mixin flexColumn {
+  /* 09版 */
+  -webkit-box-orient: vertical;
+  /* 12版 */
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  -o-flex-direction: column;
+  flex-direction: column;
+}
+
+
+// 2.样式
+@mixin ellipsis{
+  text-overflow:ellipsis; 
+  overflow:hidden; 
+  white-space:nowrap;
+}
+
+
+@mixin gradientBackground($strat, $end, $dirction:bottom) {
+  background:-webkit-linear-gradient($dirction,$strat,$end);/*Chrome 10+ Safari 5.1+*/
+  background:-moz-linear-gradient($dirction,$strat,$end);/*Firefox 3.6+*/
+  background:-o-linear-gradient($dirction,$strat,$end); /*Opera 11.5+*/
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#{$strat}, endColorstr=#{$end})";//IE8,9
+  background:linear-gradient(to $dirction,$strat,$end);
+}
+
+@mixin centerBackground($name) {
+  background: url(../images/#{$name}) center center no-repeat;
+  background-size: cover;
+}
+
+
+// 3.动画
+@mixin transition( $property:all,$time:0.3s, $method:linear) {
+  -webkit-transition: $property $time $method;
+  -moz-transition: $property $time $method;
+  -ms-transition: $property $time $method;
+  -o-transition: $property $time $method;
+  transition: $property $time $method;
+}
+
+// ...表示可传多个属性值
+@mixin transform($method, $args...) {
+  -webkit-transform:(#{$method})+'('+(#{$args})+')';   
+  -moz-transform:(#{$method})+'('+(#{$args})+')';
+  -ms-transform:(#{$method})+'('+(#{$args})+')';
+  -o-transform:(#{$method})+'('+(#{$args})+')';
+  transform:(#{$method})+'('+(#{$args})+')';
+}
+
+//该mixin放在前面依旧生效，同js变量提升
+@mixin scale($multiple:1.1,$time:0.3s,$method:linear) {
+  @include transition($time,$method);
+
+  &:hover {
+   @include transform(scale,$multiple);
+  }
+}

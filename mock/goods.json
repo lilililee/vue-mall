@@ -1,0 +1,96 @@
+{
+	"status": "0",
+	"data": [
+		{
+			"productId": "10001",
+			"productName": "小钢炮蓝牙音箱",
+			"productPrice": "129.00",
+			"productImg": "1.jpg"
+		},
+		{
+			"productId": "10002",
+			"productName": "头戴式耳机-3",
+			"productPrice": "80.00",
+			"productImg": "2.jpg"
+		},
+		{
+			"productId": "10003",
+			"productName": "智能摄像机",
+			"productPrice": "389.00",
+			"productImg": "3.jpg"
+		},
+		{
+			"productId": "10004",
+			"productName": "小米6",
+			"productPrice": "2499.00",
+			"productImg": "4.jpg"
+		},
+		{
+			"productId": "10005",
+			"productName": "平衡车",
+			"productPrice": "1999.00",
+			"productImg": "5.jpg"
+		},
+		{
+			"productId": "10006",
+			"productName": "智能插线板",
+			"productPrice": "59.00",
+			"productImg": "6.jpg"
+		},
+		{
+			"productId": "10007",
+			"productName": "自拍杆",
+			"productPrice": "39.00",
+			"productImg": "7.jpg"
+		},
+		{
+			"productId": "10008",
+			"productName": "小米净水器",
+			"productPrice": "1999.00",
+			"productImg": "8.jpg"
+		},
+		{
+			"productId": "10009",
+			"productName": "IH电饭煲",
+			"productPrice": "999.00",
+			"productImg": "9.jpg"
+		},
+		{
+			"productId": "10010",
+			"productName": "小米电视4A",
+			"productPrice": "2099.00",
+			"productImg": "10.jpg"
+		},
+		{
+			"productId": "10011",
+			"productName": "Ear1000",
+			"productPrice": "1000.00",
+			"productImg": "11.jpg"
+		},
+		{
+			"productId": "10012",
+			"productName": "Ear1100",
+			"productPrice": "1100.00",
+			"productImg": "12.jpg"
+		},
+		{
+			"productId": "10013",
+			"productName": "Ear2000",
+			"productPrice": "2000.00",
+			"productImg": "13.jpg"
+		},
+		{
+			"productId": "10014",
+			"productName": "Ear1600",
+			"productPrice": "1600.00",
+			"productImg": "14.jpg"
+		},
+		{
+			"productId": "10015",
+			"productName": "Ear1200",
+			"productPrice": "1200.00",
+			"productImg": "15.jpg"
+		}
+
+	]
+}

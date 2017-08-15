@@ -1,0 +1,19 @@
+[
+	{
+		"userId": "admin",
+		"userPassword": "123456",
+		"userName": "lee",
+		"cartList": [
+			{
+				"productId": "10002",
+				"productName": "头戴式耳机-3",
+				"productPrice": 80.00,
+				"productImg": "2.jpg",
+				"productNum": 1,
+				"checked": false
+			}
+		],
+		"addressList": [],
+		"orderList": []
+	}
+]
