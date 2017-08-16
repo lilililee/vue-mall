@@ -21,7 +21,7 @@
 					<ul class="t-body">
 						<li v-for="item in cartList">
 							<div class="name">
-								<i class="iconfont" :class="item.checked?'icon-duigou':'icon-yuan'" @click="item.checked=!item.checked"></i>
+								<i class="iconfont" :class="item.checked?'icon-duigou':'icon-yuan'" @click="checkedGood(item)"></i>
 								<img :src="'../static/' + item.productImg" alt="item.productName">
 								<h3>{{item.productName}}</h3>
 							</div>
@@ -30,16 +30,16 @@
 							</div>
 							<div class="count">
 								<div class="count-btns">
-									<a href="javascript:" class="btn-minus" @click="minusNum(item)">-</a>
+									<a href="javascript:" class="btn-minus" @click="changeSomeGoodNum(item, -1)">-</a>
 									<a href="javascript:" class="count-num">{{item.productNum}}</a>
-									<a href="javascript:" class="btn-plus" @click="plusNum(item)">+</a>
+									<a href="javascript:" class="btn-plus" @click="changeSomeGoodNum(item, 1)">+</a>
 								</div>
 							</div>
 							<div class="total-money">
 								{{item.productPrice * item.productNum | fMoney}}
 							</div>
 							<div class="delete">
-								<i class="iconfont icon-lajitong" @click="deleteGoodId=item._id;isShowDeleteGoodModal=true"></i>
+								<i class="iconfont icon-lajitong" @click="deleteGoodId=item.productId;isShowDeleteGoodModal=true"></i>
 							</div>
 						</li>
 					</ul>
@@ -47,11 +47,11 @@
 
 				<div class="cart-footer">
 					<div class="select-all" v-if="isSelectAll">
-						<i class="iconfont icon-duigou" @click="toggleSelectAll()"></i>
+						<i class="iconfont icon-duigou" @click="checkedGood('none')"></i>
 						<span>Cancel select all</span>
 					</div>
 					<div class="select-all" v-else>
-						<i class="iconfont icon-yuan" @click="toggleSelectAll()"></i>
+						<i class="iconfont icon-yuan" @click="checkedGood('all')"></i>
 						<span>Select all</span>
 					</div>
 					<div class="total">
@@ -117,16 +117,9 @@
 				this.getCartList();
 			}
 		},
-		beforeDestroy() {
-			alert(11)
-		},
-		beforeRouteUpdate (to, from, next) {
-			alert(2222)
-
-		},
 		watch: {
 			loginUserId(){
-				console.log(1123)
+				
 				this.getCartList();
 			}
 		},	
@@ -160,26 +153,34 @@
 				}
 				
 			},
-			minusNum(item) {
-				if (item.productNum > 1) {
-					item.productNum --;
-				}
-			},
-			plusNum(item) {
-				item.productNum ++;			
+			changeSomeGoodNum(item, num) {
+				if (item.productNum + num < 1) return;
+
+				axios.post('/api/users/changeSomeGoodNum',{
+					userId: this.loginUserId,
+					productId: item.productId,
+					num: num
+				}).then(res=>{
+					var data = res.data;
+					if(data.status == '0') {
+						item.productNum += num;
+					} else {
+						console.log(data.msg);
+					}
+				})
 			},
 			deleteGood() {
 				axios.post('/api/users/deleteGood', {
 
 					userId: this.loginUserId,
 					deleteGoodId: this.deleteGoodId
-					
+
 				}).then((res) => {
 					var data = res.data;
 					if(data.status == '0'){
 						// this.cartList = data.result;
 						this.cartList.forEach((item,index) => {
-							if(item._id == this.deleteGoodId) {
+							if(item.productId == this.deleteGoodId) {
 								this.cartList.splice(index, 1);
 								return false
 							}
@@ -192,6 +193,39 @@
 				})
 
 				this.isShowDeleteGoodModal = false;
+			},
+			checkedGood(args) {
+				var productId = '';
+				switch (args) {
+					case 'all':
+					productId = 'all';
+					this.cartList.forEach(function(item){
+						item.checked = true;
+					})
+					break;
+					case 'none':
+					productId = 'none';
+					this.cartList.forEach(function(item){
+						item.checked = false;
+					})
+					break;
+					default: 
+					productId = args.productId;
+					args.checked = !args.checked;
+				}
+				axios.post('/api/users/checkedGood', {
+					userId: this.loginUserId,
+					productId: productId
+				}).then((res) => {
+					var data = res.data;
+					if(data.status == '0') {
+						
+					} else {
+						console.log(data.msg)
+					}
+				}).catch((err) => {
+					console.log(err)
+				})
 			}
 		},
 		filters: {

@@ -20,7 +20,7 @@
 
 			
 			<div class="md-overlay" @click.self="isShowLoginModal=false" :class="{'md-overlay-show': isShowLoginModal}">
-				<div class="md-modal md-login" :class="{'md-modal-show': isShowLoginModal}">
+				<div class="md-modal md-login" :class="{'md-modal-show': isShowLoginModal}" @keyup.enter="login">
 					<i class="iconfont icon-guanbi01 close"  @click="isShowLoginModal=false;"></i>
 					<div class="md-top">
 						<h2>Login in</h2>
@@ -100,8 +100,8 @@
 		methods: {
 			login() {
 				axios.post('api/users/login',{
-					username: this.username,
-					password: this.password
+					userId: this.username,
+					userPassword: this.password
 				})
 				.then((res) => {
 					var data = res.data;

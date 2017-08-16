@@ -1,51 +1,40 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var MUsers = require('../models/users');
-var MGoods = require('../models/goods');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const MUsers = require('../models/users');
+const MGoods = require('../models/goods');
+const publicUtil = require('../utils/public-util');
 
 /* GET users listing. */
-router.post('/login', function(req, res, next) {
+router.post('/login', (req, res, next) => {
 	console.log('link: /users/login [POST]')
-	var	queryParam = {
-		userId: req.body.username,
-		userPassword: req.body.password
-	}
 
-	MUsers.findOne(queryParam,function(err, doc){
-		// console.log('have exec findOne')
-		if (err) {
+	// 只需定义查询成功的回调
+	let callback = doc => {
+		if (doc.userPassword == req.body.userPassword) {
+			res.cookie('userId',doc.userId, {
+				path: '/',
+				maxAge: 1000 * 60 *60
+			})
 			res.json({
-				status: '1',
-				msg: err.message,
-				result: 'error'
+				status: '0',
+				msg: 'success',
+				result: doc
 			})
 		} else {
-			// 查询不到时doc为null
-			if (doc) {
-				res.cookie('userId',doc.userId, {
-					path: '/',
-					maxAge: 1000 * 60 *60
-				})
-				res.json({
-					status: '0',
-					msg: 'success',
-					result: doc
-				})
-			} else {
-				res.json({
-					status: '2',
-					msg: 'failed',
-					result: '用户不存在或密码错误!'
-				})
-			}
-			
+			res.json({
+				status: '2',
+				msg: '用户不存在或密码错误!',
+				result: ''
+			})
 		}
-	})
+	}
+
+	publicUtil.findUser(req, res, next, callback);
 
 });
 
-router.post('/logout', function(req, res, next){
+router.post('/logout', (req, res, next) => {
 	console.log('link: /users/logout [POST]')
 	// 清除客户端cookie
 	res.cookie("userId","",{
@@ -59,7 +48,7 @@ router.post('/logout', function(req, res, next){
 	})
 })
 
-router.post('/checkLogin', function(req, res, next){
+router.post('/checkLogin', (req, res, next) => {
 	console.log('link: /users/checkLogin [POST]')
 	
 	res.cookie("userId", req.cookies.userId,{
@@ -76,157 +65,140 @@ router.post('/checkLogin', function(req, res, next){
 })
 
 
-router.post('/addToCart', function(req, res, next){
+router.post('/addToCart', (req, res, next) => {
 	console.log('link: /users/addToCart [POST]')
 
-	MUsers.findOne({userId: req.body.userId}, function(err, doc){
-		console.log(req.body.userId)
-		if (doc) {
-			var isExist = false;
-			// 当购物车已有当前商品时
-			doc.cartList.forEach(function(item) {
+	let callback = (doc) => {
+		console.log(doc)
+		let isExist = false;
+		// 当购物车已有当前商品时
+		doc.cartList.forEach(item => {
+			if (item.productId == req.body.productId) {
+				isExist = true;
+				item.productNum += parseInt(req.body.productNum);
+				// 保存到用户购物车中
+				publicUtil.documentSave(res, doc);
+				return false;
+			}
+		})
+
+		if (!isExist) {
+			let callback2 = (doc2) => {
+				let newDoc = {			
+					productId: doc2.productId,
+					productName: doc2.productName, 
+					productPrice: doc2.productPrice,
+					productImg: doc2.productImg,
+					productNum: parseInt(req.body.productNum),
+					checked: false
+				}
+
+				doc.cartList.push(newDoc);
+				// 保存到用户购物车中
+				publicUtil.documentSave(res, doc);
+			}
+
+			publicUtil.findProduct(req, res, next, callback2);
+		}
+
+	}
+
+	publicUtil.findUser(req, res, next, callback);
+
+})
+
+
+router.get('/cartList', (req, res, next) => {
+	console.log('link: /users/cartList [GET]')
+
+	let callback = (doc) => {
+		res.json({
+			status: '0',
+			msg: 'success',
+			result: doc.cartList
+		})
+	}
+
+	publicUtil.findUser(req, res, next, callback);
+
+})
+
+router.post('/deleteGood',(req, res, next) => {
+	console.log('link: /users/deleteGood [POST]')
+
+	let callback = (doc) => {
+		doc.cartList.forEach((item,index) => {
+			if(item.productId == req.body.deleteGoodId) {
+				doc.cartList.splice(index, 1);
+				return false;
+			}
+		})
+
+		publicUtil.documentSave(res, doc);
+
+	};
+
+	publicUtil.findUser(req, res, next, callback);
+})
+
+
+router.post('/changeSomeGoodNum',(req, res, next) => {
+	console.log('link: /users/changeSomeGoodNum [POST]')
+
+	// let fnRunDevTest = 11111111
+	// 同时在publicUtil.findUser中定义 let fnRunDevTest = 2222222
+	let callback = (doc)=> {
+		// console.log(fnRunDevTest)	// 11111111
+		// 此函数作用域指向当前执行环境
+		doc.cartList.forEach((item) => {
+			if (item.productId == req.body.productId) {
+				if (item.productNum + req.body.num > 0) {
+					item.productNum += req.body.num;
+				}
+				return false;
+			}
+		})
+
+		publicUtil.documentSave(res, doc);
+	}
+
+	publicUtil.findUser(req, res, next, callback);
+	
+})
+
+
+router.post('/checkedGood', (req, res, next) => {
+	console.log('link: /users/checkedGood [POST]')
+
+	// let fnRunDevTest = 11111111
+	// 同时在publicUtil.findUser中定义 let fnRunDevTest = 2222222
+	let callback = (doc)=> {
+		// console.log(fnRunDevTest)	// 11111111
+		// 此函数作用域指向当前执行环境
+
+		if (req.body.productId == 'all') {
+			doc.cartList.forEach((item) => {
+				item.checked = true;
+			})
+		} else if (req.body.productId == 'none') {
+			doc.cartList.forEach((item) => {
+				item.checked = false;
+			})
+		} else {
+			doc.cartList.forEach((item) => {
 				if (item.productId == req.body.productId) {
-					isExist = true;
-					item.productNum += parseInt(req.body.productNum);
-					doc.save(function(err, doc) {
-						if(err) {
-							res.json({
-								status:"1",
-								msg:'error',
-								result:''
-							})
-						} else {
-							res.json({
-								status:"0",
-								msg:'加入购物车成功',
-								result:''
-							})
-						}
-					})
+					item.checked = !item.checked;
+					return false;
 				}
 			})
 
-			if (!isExist) {
-				
-				MGoods.findOne({productId: req.body.productId}, function(err2, doc2) {
-					if (doc2) {
-						// 生成一个准备加入购物车的对象
-
-						var newDoc = {			
-							productId: doc2.productId,
-							productName: doc2.productName, 
-							productPrice: doc2.productPrice,
-							productImg: doc2.productImg,
-							productNum: parseInt(req.body.productNum),
-							checked: false
-						}
-					
-						doc.cartList.push(newDoc);
-						// 保存到用户购物车中
-						doc.save(function(err, doc) {
-							if(err) {
-								res.json({
-									status:"1",
-									msg:'error',
-									result:''
-								})
-							} else {
-								res.json({
-									status:"0",
-									msg:'加入购物车成功',
-									result:''
-								})
-							}
-						})
-
-					} else {
-						res.json({
-							status:"4",
-							msg:'商品已下架',
-							result:''
-						})
-					}
-				})
-			}
-
 		}
+		
+		publicUtil.documentSave(res, doc);
+	}
 
-	})
-
-})
-
-
-router.get('/cartList', function(req, res, next){
-	console.log('link: /users/cartList [GET]')
-
-	MUsers.findOne({userId: req.query.userId}, function(err, doc){
-		if (err) {
-			res.json({
-				status: '1',
-				msg: err.message,
-				result: ''
-			})
-		} else {
-			if(doc) {
-				res.json({
-					status: '0',
-					msg: 'success',
-					result: doc.cartList
-				})
-			} else {
-				res.json({
-					status: '2',
-					msg: '用户不存在',
-					result: ''
-				})
-			}
-		}
-	})
-})
-
-router.post('/deleteGood',function(req, res, next){
-	console.log('link: /users/deleteGood [POST]')
-
-	MUsers.findOne({userId: req.body.userId}, function(err, doc){
-		if (err) {
-			res.json({
-				status: '1',
-				msg: err.message,
-				result: ''
-			})
-		} else {
-			if(doc) {
-				doc.cartList.forEach(function(item,index){
-					
-					if(item._id = req.body.deleteGoodId) {
-						doc.cartList.splice(index, 1);
-						return false;
-					}
-				})
-				
-
-				doc.save(function(err,doc2){
-					if (err) {
-						console.log(err)
-					} else {
-
-						res.json({
-							status: '0',
-							msg: 'success',
-							result: doc2.cartList
-						})
-					}
-				})
-				
-			} else {
-				res.json({
-					status: '2',
-					msg: '用户已不存在',
-					result: ''
-				})
-			}
-		}
-	})
+	publicUtil.findUser(req, res, next, callback);
+	
 })
 
 module.exports = router;
