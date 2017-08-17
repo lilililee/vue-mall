@@ -8,6 +8,7 @@ import VueInfiniteScroll from 'vue-infinite-scroll'
 import 'babel-polyfill'				// 解决ie报错：polyfill-eventsource added missing EventSource to window
 import Vuex from 'vuex'
 import axios from 'axios'
+import util from './assets/javascripts/util'
 // 全局配置
 Vue.config.productionTip = false
 
@@ -19,7 +20,11 @@ Vue.use(VueLazyload, {
 })
 
 Vue.use(VueInfiniteScroll)
+
 Vue.use(Vuex);
+
+Vue.filter('currency',util.currency)
+
 
 // vuex定义的全局变量
 const store = new Vuex.Store({

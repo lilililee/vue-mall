@@ -26,7 +26,7 @@
 								<h3>{{item.productName}}</h3>
 							</div>
 							<div class="price">
-								{{item.productPrice | fMoney}}
+								{{item.productPrice | currency}}
 							</div>
 							<div class="count">
 								<div class="count-btns">
@@ -36,7 +36,7 @@
 								</div>
 							</div>
 							<div class="total-money">
-								{{item.productPrice * item.productNum | fMoney}}
+								{{item.productPrice * item.productNum | currency}}
 							</div>
 							<div class="delete">
 								<i class="iconfont icon-lajitong" @click="deleteGoodId=item.productId;isShowDeleteGoodModal=true"></i>
@@ -48,16 +48,16 @@
 				<div class="cart-footer">
 					<div class="select-all" v-if="isSelectAll">
 						<i class="iconfont icon-duigou" @click="checkedGood('none')"></i>
-						<span>Cancel select all</span>
+						<span class="noselect">Cancel select all</span>
 					</div>
 					<div class="select-all" v-else>
 						<i class="iconfont icon-yuan" @click="checkedGood('all')"></i>
-						<span>Select all</span>
+						<span class="noselect">Select all</span>
 					</div>
 					<div class="total">
 						<span class="title">Item total: </span> 
-						<span class="all-total-money">{{totalMoney | fMoney}}</span>
-						<router-link to="/checkout" class="checkout">checkout</router-link>
+						<span class="all-total-money">{{totalMoney | currency}}</span>
+						<a href="javascript:" @click="toCheckout" class="checkout">checkout</a>
 					</div>
 				</div>
 			</div>
@@ -68,8 +68,19 @@
 				</div>
 
 				<div slot="btns" class="md-btns">
-					<a href="javascript:" class="md-btn-defult" @click="deleteGood">确定</a>
+					<a href="javascript:" class="md-btn-default" @click="deleteGood">确定</a>
 					<a href="javascript:" class="md-btn-danger" @click="isShowDeleteGoodModal=false">取消</a>
+					
+				</div>
+			</v-modal>
+
+			<v-modal :isShow.sync="isShowNoSelectModel">
+				<div slot="msg" class="md-msg">
+					请起码选中一件商品！
+				</div>
+
+				<div slot="btns" class="md-btns">
+					<a href="javascript:" class="md-btn-default" @click="isShowNoSelectModel=false">确认</a>
 					
 				</div>
 			</v-modal>
@@ -89,7 +100,8 @@
 			return {
 				cartList: [],
 				isShowDeleteGoodModal: false,
-				deleteGoodId: ''
+				deleteGoodId: '',
+				isShowNoSelectModel: false
 			}
 		},	
 		computed: {
@@ -226,11 +238,17 @@
 				}).catch((err) => {
 					console.log(err)
 				})
+			},
+			toCheckout() {
+				if (this.totalMoney == 0) {
+					this.isShowNoSelectModel = true;
+				} else {
+					this.$router.push('/address')
+				}
+
 			}
-		},
-		filters: {
-			fMoney:util.fMoney
 		}
+		
 	}
 </script>
 

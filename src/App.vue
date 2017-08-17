@@ -25,29 +25,8 @@ export default {
   name: 'app',
   data() {
     return {
-      // loginUserId: ''   
+      
     }
-  },
-  mounted() {
-    // this.checkLogin();
-  },
-  methods: {
-    checkLogin() {
-
-      axios.post('api/users/checkLogin').then((res)=> {
-        var data = res.data;
-        if(data.status == '0'){      
-
-          this.loginUserId = data.result.userId; 
-        }
-
-        
-      })
-    }
-
-  },
-  components: {
-
   }
 }
 </script>

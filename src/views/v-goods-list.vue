@@ -30,11 +30,10 @@
 							<li v-for="item in goodsList">
 								<div class="content">
 									<a href="#" class="img"  v-lazy:background-image="'../../static/' + item.productImg">
-
 									</a>
 									<div class="text">
 										<h3>{{item.productName}}</h3>
-										<div class="price">￥{{item.productPrice}}</div>
+										<div class="price">{{item.productPrice | currency}}</div>
 										<a href="javascript:" class="add-cart" @click="addToCart(item.productId)">加入购物车</a>
 									</div>
 								</div>
@@ -55,7 +54,7 @@
 					您当前未登录！
 				</div>
 				<div slot="btns" class="md-btns">
-					<a href="javascript:" class="md-btn-defult" @click="isShowNotLoginModal=false">确认</a>
+					<a href="javascript:" class="md-btn-default" @click="isShowNotLoginModal=false">确认</a>
 				</div>
 			</v-modal>
 
@@ -65,7 +64,7 @@
 				</div>
 
 				<div slot="btns" class="md-btns">
-					<a href="javascript:" class="md-btn-defult" @click="isShowAddSuccessModal=false">继续购物</a>
+					<a href="javascript:" class="md-btn-default" @click="isShowAddSuccessModal=false">继续购物</a>
 					<router-link to="/cart" class="md-btn-danger" >查看购物车</router-link>
 				</div>
 			</v-modal>
@@ -210,7 +209,7 @@
 
 			addToCart(productId) {
 				axios.post('api/users/addToCart',{
-					userId: this.loginUserId,
+				
 					productId: productId,
 					productNum: 1
 				}).then((res)=>{

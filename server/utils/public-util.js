@@ -17,10 +17,11 @@ let getRequestParams = (req) => {
 	return params;
 }
 
-let outputErrorInfo = (res, msg) => {
+let outputErrorInfo = (res, msg, status) => {
 	console.log('Error!!!' + msg)
+	status = status || '1'
 	res.json({
-		status: '1',
+		status: status,
 		msg: msg,
 		result: ''
 	})
@@ -54,14 +55,12 @@ exports.connectMongdb = (dbUrl) => {
 // 查找用户
 exports.findUser = (req, res, next, callback) => {
 	// let fnRunDevTest = 2222222;
-	let params = getRequestParams(req);
-
-	if (!params.userId) {
-		let msg = '传递用户id参数错误，应包含userId字段,当前参数：' + JSON.stringify(params);
-		outputErrorInfo(res, msg);
+	if (!req.cookies.userId) {
+		let msg = '当前用户未登录'
+		outputErrorInfo(res, msg, '3');
 	}
 
-	MUsers.findOne({userId: params.userId},(err, doc) =>{
+	MUsers.findOne({userId: req.cookies.userId},(err, doc) =>{
 		if (err) {
 			outputErrorInfo(res, msg);
 		} else {
@@ -85,7 +84,7 @@ exports.findProduct = (req, res, next, callback) => {
 	let params = getRequestParams(req);
 
 	if (!params.productId) {	
-		let msg = '传递用户id参数错误，应包含productId字段,当前参数：' + JSON.stringify(params);
+		let msg = '传递产品id参数错误，应包含productId字段,当前参数：' + JSON.stringify(params);
 		outputErrorInfo(res, msg);
 	}
 	
@@ -106,6 +105,25 @@ exports.findProduct = (req, res, next, callback) => {
 
 	})
 }
+
+exports.updateUser = (req, res, next, query, handle) => {
+	if (!req.cookies.userId) {
+		let msg = '当前用户未登录'
+		outputErrorInfo(res, msg, '3');
+	}
+
+	MUsers.update(query, handle, (err, doc) => {
+		if(err){
+			outputErrorInfo(res, err.msg);
+		} else {
+			res.json({
+				status:"0",
+				msg:'success!',
+				result:''
+			})
+		}
+	})
+} 
 
 
 exports.documentSave = (res, doc) => {

@@ -9,28 +9,32 @@ const publicUtil = require('../utils/public-util');
 router.post('/login', (req, res, next) => {
 	console.log('link: /users/login [POST]')
 
-	// 只需定义查询成功的回调
-	let callback = doc => {
-		if (doc.userPassword == req.body.userPassword) {
-			res.cookie('userId',doc.userId, {
-				path: '/',
-				maxAge: 1000 * 60 *60
-			})
-			res.json({
-				status: '0',
-				msg: 'success',
-				result: doc
-			})
-		} else {
-			res.json({
-				status: '2',
-				msg: '用户不存在或密码错误!',
-				result: ''
-			})
-		}
-	}
+	MUsers.findOne({
+		userId: req.body.userId,
+		userPassword: req.body.userPassword
+	},(err, doc) => {
 
-	publicUtil.findUser(req, res, next, callback);
+		if(err) {
+			publicUtil.outputErrorInfo(res, err.msg)
+		} else {
+			if (doc) {
+				res.cookie('userId',doc.userId, {
+					path: '/',
+					maxAge: 1000 * 60 *60
+				})
+				res.json({
+					status: '0',
+					msg: 'success',
+					result: doc
+				})
+			} else {
+				let msg = '当前用户不存在'
+				publicUtil.outputErrorInfo(res, msg, '2')
+			}
+			
+		}
+	})
+
 
 });
 
@@ -69,7 +73,6 @@ router.post('/addToCart', (req, res, next) => {
 	console.log('link: /users/addToCart [POST]')
 
 	let callback = (doc) => {
-		console.log(doc)
 		let isExist = false;
 		// 当购物车已有当前商品时
 		doc.cartList.forEach(item => {
@@ -102,7 +105,7 @@ router.post('/addToCart', (req, res, next) => {
 		}
 
 	}
-
+	
 	publicUtil.findUser(req, res, next, callback);
 
 })

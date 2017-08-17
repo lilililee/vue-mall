@@ -277,7 +277,7 @@ a.text-danger:focus {
 				line-height: 39px;
 				color: #d1434a;
 			}
-			.md-btn-defult {
+			.md-btn-default {
 				border: 2px solid #d1434a;
 				&:hover {
 					background: #ffe5e6;
@@ -304,6 +304,16 @@ a.text-danger:focus {
 		}
 	}
 
+}
+
+
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Chrome/Safari/Opera */
+	-khtml-user-select: none; /* Konqueror */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently not supported by any browser */
 }
 
 
