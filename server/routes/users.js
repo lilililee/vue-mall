@@ -204,4 +204,44 @@ router.post('/checkedGood', (req, res, next) => {
 	
 })
 
+
+router.get('/addressList', (req, res, next) => {
+	console.log('link: /users/addressList [GET]')
+
+	let callback = (doc) => {
+		res.json({
+			status: '0',
+			msg: 'success',
+			result: doc.addressList
+		}) 
+	}
+
+	publicUtil.findUser(req, res, next, callback);
+})
+
+router.post('/setDefaultAddress', (req, res, next) => {
+	console.log('link: /users/setDefaultAddress [post]')
+
+	let callback = (doc) => {
+		doc.addressList.forEach((item) => {
+			if (item.addressId == req.body.addressId){
+				item.isDefault = true;
+			} else {
+				item.isDefault = false;
+			}
+			
+		})
+
+		publicUtil.documentSave(res, doc);
+
+		res.json({
+			status: '0',
+			msg: 'success',
+			result: ''
+		}) 
+	}
+
+	publicUtil.findUser(req, res, next, callback);
+})
+
 module.exports = router;

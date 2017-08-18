@@ -1,4 +1,12 @@
 <template>
+	<div>
+		<v-header></v-header>
+		<v-position>
+			<span>购物车</span>
+		</v-position>
+
+		<v-footer></v-footer>
+	</div>
 	
 </template>
 

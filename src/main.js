@@ -23,6 +23,8 @@ Vue.use(VueInfiniteScroll)
 
 Vue.use(Vuex);
 
+Vue.prototype.$axios = axios;
+
 Vue.filter('currency',util.currency)
 
 
@@ -111,11 +113,13 @@ import vHeader from './components/v-header'
 import vPosition from '@/components/v-position'
 import vFooter from '@/components/v-footer'
 import vModal from '@/components/v-modal'
+import vProcess from '@/components/v-process'
 
 Vue.component('v-header',vHeader);
 Vue.component('v-position',vPosition);
 Vue.component('v-footer',vFooter);
 Vue.component('v-modal',vModal);
+Vue.component('v-process',vProcess);
 
 
 /* eslint-disable no-new */

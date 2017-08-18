@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import VGoodsList from '@/views/v-goods-list'
-import VCart from '@/views/v-cart'
+import vGoodsList from '@/views/v-goods-list'
+import vCart from '@/views/v-cart'
+import vAddress from '@/views/v-address'
 
 Vue.use(Router)
 
@@ -10,16 +11,25 @@ export default new Router({
   
   {
     path: '/cart',
-    name: 'VCart',
-    component: VCart,
+    name: 'vCart',
+    component: vCart,
     meta: {
       requireAuth: true
     } 
   },
   {
+    path: '/address',
+    name: 'vAddress',
+    component: vAddress,
+    meta: {
+      requireAuth: true
+    } 
+  },
+
+  {
     path: '/*',
-    name: 'VGoodsList',
-    component: VGoodsList
+    name: 'vGoodsList',
+    component: vGoodsList
 
   }
 

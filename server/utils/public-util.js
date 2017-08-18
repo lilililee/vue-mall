@@ -55,14 +55,16 @@ exports.connectMongdb = (dbUrl) => {
 // 查找用户
 exports.findUser = (req, res, next, callback) => {
 	// let fnRunDevTest = 2222222;
+	
 	if (!req.cookies.userId) {
 		let msg = '当前用户未登录'
 		outputErrorInfo(res, msg, '3');
 	}
-
+	
 	MUsers.findOne({userId: req.cookies.userId},(err, doc) =>{
+		
 		if (err) {
-			outputErrorInfo(res, msg);
+			outputErrorInfo(res, err.msg);
 		} else {
 			if (doc) {
 				callback(doc)

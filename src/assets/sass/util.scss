@@ -10,11 +10,6 @@ $color-warning: #8a6d3b;
 $color-danger: #a94442;
 
 
-// 过渡方法 
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
 // 常用mixin
 // 1.布局
 @mixin clearfix {

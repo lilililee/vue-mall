@@ -317,6 +317,12 @@ a.text-danger:focus {
 }
 
 
+// 过渡方法 
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+
 
 
 

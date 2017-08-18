@@ -13,7 +13,50 @@
 				"checked": false
 			}
 		],
-		"addressList": [],
+		"addressList": [
+			{
+				"addressId": "20001",
+				"userName": "zhangsan",
+				"streetName": "中山市东区朗晴轩3楼",
+				"postCode": "100001",
+				"tel": 123456,
+				"isDefault": false
+			},
+			{
+				"addressId": "20001",
+				"userName": "zhangsan",
+				"streetName": "中山市东区朗晴轩3楼",
+				"postCode": "100001",
+				"tel": 123456,
+				"isDefault": true
+			},
+			{
+				"addressId": "20001",
+				"userName": "zhangsan",
+				"streetName": "中山市东区朗晴轩3楼",
+				"postCode": "100001",
+				"tel": 123456,
+				"isDefault": false
+			},
+			{
+				"addressId": "20001",
+				"userName": "zhangsan",
+				"streetName": "中山市东区朗晴轩3楼",
+				"postCode": "100001",
+				"tel": 123456,
+				"isDefault": false
+			},
+			{
+				"addressId": "20001",
+				"userName": "zhangsan",
+				"streetName": "中山市东区朗晴轩3楼",
+				"postCode": "100001",
+				"tel": 123456,
+				"isDefault": false
+			}
+
+
+		],
 		"orderList": []
 	}
 ]
