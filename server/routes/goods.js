@@ -45,7 +45,6 @@ router.get('/list', function(req, res, next) {
 
 	// 此时开始查询，并必须要有回调
 	finnalMGoods.exec((err, doc)=> {
-
 		if (err) {
 			res.json({
 				status: '1',
@@ -59,10 +58,8 @@ router.get('/list', function(req, res, next) {
 					msg: 'success',
 					result: doc
 				})
-			},100)		// 模拟延时时间
-			
+			},100)		// 模拟延时时间			
 		}
-
 	})
 
 	

@@ -23,6 +23,7 @@ Vue.use(VueInfiniteScroll)
 
 Vue.use(Vuex);
 
+// axios通过此方法全局使用
 Vue.prototype.$axios = axios;
 
 Vue.filter('currency',util.currency)
@@ -32,13 +33,16 @@ Vue.filter('currency',util.currency)
 const store = new Vuex.Store({
 	state: {
 		loginUserId:'',
-		cartCount: 0
+		cartCount: -1
 	},
 	mutations: {
 		updateUserInfo(state, loginUserId) {
 			state.loginUserId = loginUserId;
 		},
-		updateCartCount(state,cartCount){
+		updateCartCount(state, cartCount){
+			state.cartCount = cartCount;
+		},
+		addCartCount(state, cartCount){
 			state.cartCount += cartCount;
 		}
 	}
@@ -69,6 +73,29 @@ router.beforeEach((to, from, next) => {
 	// }
 
 
+	function checkLogin() {
+		return new Promise(function(reslove, reject){
+			axios.post('api/users/checkLogin').then((res)=> {
+				var data = res.data;
+				if(data.status == '0'){ 
+					reslove(data.result.userId)     		
+					// store.commit('updateUserInfo', );
+
+					next();
+				} else {
+				// 如果不加此判断，直接写next('/')，会无限跳转到'/'造成死循环
+				if (to.path == '/') {
+					next();
+				} else {
+					next('/');
+				}
+				
+			}
+		})
+		})
+	}
+
+
 	
 	// 会先执行此函数，再执行checkLogin
 	// 导致登录且已进入其他界面时，直接刷新会跳转到'/'，虽然已经登录了，但是此时还未执行checkLogin
@@ -90,7 +117,9 @@ router.beforeEach((to, from, next) => {
 		axios.post('api/users/checkLogin').then((res)=> {
 			var data = res.data;
 			if(data.status == '0'){      		
-				store.commit('updateUserInfo', data.result.userId)
+				store.commit('updateUserInfo', data.result.userId);
+				store.commit('updateCartCount', data.result.cartCount);
+
 				next();
 			} else {
 				// 如果不加此判断，直接写next('/')，会无限跳转到'/'造成死循环

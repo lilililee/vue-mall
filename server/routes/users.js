@@ -22,10 +22,16 @@ router.post('/login', (req, res, next) => {
 					path: '/',
 					maxAge: 1000 * 60 *60
 				})
+				let cartCount = 0;
+				doc.cartList.forEach(item => {
+					cartCount += item.productNum
+				})
 				res.json({
 					status: '0',
 					msg: 'success',
-					result: doc
+					result: {
+						cartCount: cartCount
+					}
 				})
 			} else {
 				let msg = '当前用户不存在'
@@ -55,17 +61,27 @@ router.post('/logout', (req, res, next) => {
 router.post('/checkLogin', (req, res, next) => {
 	console.log('link: /users/checkLogin [POST]')
 	
-	res.cookie("userId", req.cookies.userId,{
-		path:"/",
-		maxAge:1000 * 60 *60
-	});
-	res.json({
-		status:"0",
-		msg:'',
-		result: {
-			userId: req.cookies.userId
-		}
-	})
+	let callback = (doc) => {
+		res.cookie("userId", req.cookies.userId,{
+			path:"/",
+			maxAge:1000 * 60 *60
+		});
+		let cartCount = 0;
+		doc.cartList.forEach(item => {
+			cartCount += item.productNum
+		})
+		res.json({
+			status:"0",
+			msg:'',
+			result: {
+				userId: req.cookies.userId,
+				cartCount: cartCount
+			}
+		})
+	}
+
+	publicUtil.findUser(req, res, next, callback);
+	
 })
 
 
@@ -233,12 +249,76 @@ router.post('/setDefaultAddress', (req, res, next) => {
 		})
 
 		publicUtil.documentSave(res, doc);
+	}
 
-		res.json({
-			status: '0',
-			msg: 'success',
-			result: ''
-		}) 
+	publicUtil.findUser(req, res, next, callback);
+})
+
+
+router.post('/createOrder', (req, res, next) => {
+	console.log('link: /users/createOrder [post]')
+
+
+	// console.log(req.body)
+	let callback = (doc) => {
+		let order = {
+			orderId: new Date().getTime(),
+			goodsList: [],
+			adderssInfo: {},
+			shipping: 0,
+			totalNum: 0,
+			totalPrice: 0,
+			isPay: true
+		}
+
+		let filterList = [];
+
+		doc.cartList.forEach((item) => {
+			if (item.checked) {
+				order.goodsList.push(item);
+			} else {
+				filterList.push(item);
+			}
+		})
+
+		doc.cartList = filterList;
+		// console.log(filterList)
+		if (order.goodsList.length  == 0) {
+			res.json({
+				status: '7',
+				msg: '未选中商品',
+				result: ''
+			})
+		} else {
+			doc.addressList.forEach(item => {
+				if(item.addressId == req.body.addressId) {
+					order.adderssInfo = item;
+					return false;
+				}
+			})
+
+			order.goodsList.forEach(item => {
+				order.totalPrice += item.productNum * item.productPrice;
+				order.totalNum += item.productNum;
+			})
+
+			// console.log(order)
+			doc.orderList.push(order);
+
+			doc.save((err, doc) => {
+				if(err) {
+					publicUtil.outputErrorInfo(res, err.msg);
+				} else {
+					res.json({
+						status:"0",
+						msg:'success!',
+						result: order
+					})
+				}
+			})
+
+
+		}
 	}
 
 	publicUtil.findUser(req, res, next, callback);

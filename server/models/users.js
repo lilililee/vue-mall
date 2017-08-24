@@ -14,7 +14,16 @@ var userSchema = new mongoose.Schema({
 		"checked": Boolean
 	}
 	],
-	"addressList": Array,
+	"addressList": [
+	{
+		"addressId": String,
+		"userName": String,
+		"streetName": String,
+		"postCode": String,
+		"tel": Number,
+		"isDefault": Boolean
+	}	
+	],
 	"orderList": Array
 })
 

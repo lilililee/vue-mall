@@ -216,6 +216,7 @@
 					var data = res.data;
 					if(data.status == '0') {
 						this.isShowAddSuccessModal = true;
+						this.$store.commit('addCartCount', 1);
 					} else if (data.status == '3'){
 						this.isShowNotLoginModal = true;
 					}

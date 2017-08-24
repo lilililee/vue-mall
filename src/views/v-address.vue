@@ -33,6 +33,23 @@
 						<a href="javascript:" v-else  @click="isShowMore=false">收起 <i class="iconfont icon-shangjiantou"></i></a>
 					</div>
 				</div>
+
+				<div class="address-item">
+					<h2 class="title">快递方式</h2>
+					<ul class="list">
+						<li class="active">
+							<div class="name">标准快递</div>
+							<div class="price">免邮</div>
+							<div class="description">承诺在7个工作日内到达，收到货后7天内无条件退货！</div>
+						</li>
+					</ul>
+				</div>
+
+				<div class="next">
+
+					
+					<a href="javascript:" @click="toComfirm" class="btn btn-danger rt">生成订单</a>
+				</div>
 			</div>
 		</div>
 
@@ -100,6 +117,17 @@
 						console.log(data.msg)
 					}
 				})
+			},
+
+			toComfirm() {
+				// 将把选中的地址id传递到下个页面
+				var curAddessId = this.addressList[this.activeIndex].addressId;
+				this.$router.push({
+					name: 'vComfirmOrder',
+					query: {
+						addressId: curAddessId
+					}
+				})
 			}
 		}
 		
@@ -158,6 +186,10 @@
 					}
 				}
 
+				@media (max-width: 768px) {
+					width: 49%;
+				}
+
 			}
 
 			.name {
@@ -206,6 +238,18 @@
 						color: $c2;
 					}
 				}
+			}
+
+			.price {
+				font-size: 16px;
+				margin-top: 10px;
+				color: $c2;
+
+			}
+
+			.description {
+				margin-top: 20px;
+				line-height: 1.3;
 			}
 		}
 

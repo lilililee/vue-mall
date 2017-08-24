@@ -3,7 +3,7 @@
 		<div class="container">
 			<ul>
 				<li :class="step>0?'active':''">收货地址</li>
-				<li :class="step>1?'active':''">查看订单</li>
+				<li :class="step>1?'active':''">生成订单</li>
 				<li :class="step>2?'active':''">在线支付</li>
 				<li :class="step>3?'active':''">完成订单</li>
 			</ul>

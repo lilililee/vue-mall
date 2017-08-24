@@ -3,7 +3,7 @@
 		<div class="container">
 
 			<router-link to="/" class="logo lt">
-				<img src="../assets/images/logo1.png" alt="">
+				<img src="../assets/images/logo.png" alt="">
 			</router-link>
 			
 			<div class="login-cart rt">
@@ -12,6 +12,7 @@
 				<a href="javascript:" class="logout" @click="isShowExitModal=true" v-show="isLogin">退出</a>
 				<a href="javascript:"  class="cart" @click="toCart">
 					<i class="iconfont icon-gouwucheshoppingcart"></i>
+					<div class="cart-count" v-if="cartCount > -1">{{cartCount}}</div>
 				</a>
 
 
@@ -49,7 +50,7 @@
 				</div>
 
 				<div slot="btns" class="md-btns">
-					<a href="javascript:" class="md-btn-defult" @click="logout">确定</a>
+					<a href="javascript:" class="md-btn-default" @click="logout">确定</a>
 					<a href="javascript:" class="md-btn-danger" @click="isShowExitModal=false">取消</a>
 					
 				</div>
@@ -60,7 +61,7 @@
 					您当前未登录！
 				</div>
 				<div slot="btns" class="md-btns">
-					<a href="javascript:" class="md-btn-defult" @click="isShowNotLoginModal=false">确认</a>
+					<a href="javascript:" class="md-btn-default" @click="isShowNotLoginModal=false">确认</a>
 				</div>
 			</v-modal>
 		</div>
@@ -92,6 +93,9 @@
 			isLogin() {
 				return this.loginUserId != ''
 			},
+			cartCount() {
+				return this.$store.state.cartCount;
+			}
 			
 		},
 		mounted(){
@@ -108,6 +112,7 @@
 					if( data.status == '0'){
 						this.isShowLoginModal = false;		
 						this.$store.commit('updateUserInfo', this.username);
+						this.$store.commit('updateCartCount', data.result.cartCount);
 					} else if( data.status == '2' ) {
 						this.isShowLoginTips = true;
 					} else {
@@ -120,6 +125,7 @@
 					var data = res.data;
 					if(data.status == '0'){	
 						this.$store.commit('updateUserInfo', '');
+						this.$store.commit('updateCartCount', -1);
 						this.isShowExitModal=false;
 						this.$router.push({path:'/'});   // 可以简写成'/'
 						
@@ -151,6 +157,11 @@
 		.logo {
 			margin-top: -4px;
 			margin-left: -18px;
+
+			img {
+				// height: 67px;
+				margin: 0px 0 0 13px;
+			}
 		}
 
 
@@ -168,11 +179,25 @@
 
 			}
 
-		
+
 
 			.cart {
+				position: relative;
 				i {
 					font-size: 22px;
+				}
+
+				.cart-count {
+					position: absolute;
+					top: -10px;
+					left: 16px;
+					width: 22px;
+					height: 22px;
+					text-align: center;
+					line-height: 22px;
+					border-radius: 50%;
+					color: #fff;
+					background: rgba($c1, 0.8);
 				}
 			}
 			
