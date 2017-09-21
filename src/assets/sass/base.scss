@@ -122,6 +122,12 @@ input[type="submit"] {
 }
 
 
+a,img,i,input,div{
+	outline:none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-appearance: none;
+}
+
 
 .container {
 	max-width: 1280px;
@@ -211,7 +217,7 @@ a.text-danger:focus {
 		left: 50%;
 		top: 50%;
 		width: 540px;
-		max-width: 95%;
+		max-width: 90%;
 		padding: 30px 50px;
 		margin-top: 50px;
 		transform: translate(-50%, -50%);
@@ -276,6 +282,13 @@ a.text-danger:focus {
 				// font-weight: bold;
 				line-height: 39px;
 				color: $c1;
+				border: 2px solid transparent;
+
+				@media (max-width: 768px ) {
+					border-width: 1px;
+					display: block;
+					margin: 10px auto;
+				}
 			}
 			.md-btn-default {
 				border: 2px solid $c1;
@@ -316,6 +329,7 @@ a.text-danger:focus {
 	text-align: center;
 	cursor: pointer;
 	@include transition;
+	border:2px solid transparent;
 	
 	&.btn-default {
 		color: $c1;
@@ -625,9 +639,11 @@ a.text-danger:focus {
 
 				}
 				@media (max-width: 768px) {
+					margin-top: -2px;
 					.checkout {
 						width: 100px;
 						font-size: 14px;
+						letter-spacing: 0;
 					}
 				}
 			}

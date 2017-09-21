@@ -44,6 +44,20 @@
 			color: $c1;
 			margin: 50px 0;
 		}
+
+		@media (max-width: 768px) {
+			.icon-duigou1 {
+				margin: 25px 0;
+			}
+
+			.message {
+				margin: 15px 0;
+			}
+
+			.order-info {
+				margin: 25px 0;
+			}
+		}
 	}
 	
 </style>

@@ -16,39 +16,39 @@
 		"addressList": [
 			{
 				"addressId": "20001",
-				"userName": "zhangsan",
+				"userName": "zhangsan1",
 				"streetName": "中山市东区朗晴轩3楼",
 				"postCode": "100001",
 				"tel": 123456,
 				"isDefault": false
 			},
 			{
-				"addressId": "20001",
-				"userName": "zhangsan",
+				"addressId": "20002",
+				"userName": "zhangsan2",
 				"streetName": "中山市东区朗晴轩3楼",
 				"postCode": "100001",
 				"tel": 123456,
 				"isDefault": true
 			},
 			{
-				"addressId": "20001",
-				"userName": "zhangsan",
+				"addressId": "20003",
+				"userName": "zhangsan3",
 				"streetName": "中山市东区朗晴轩3楼",
 				"postCode": "100001",
 				"tel": 123456,
 				"isDefault": false
 			},
 			{
-				"addressId": "20001",
-				"userName": "zhangsan",
+				"addressId": "20004",
+				"userName": "zhangsan4",
 				"streetName": "中山市东区朗晴轩3楼",
 				"postCode": "100001",
 				"tel": 123456,
 				"isDefault": false
 			},
 			{
-				"addressId": "20001",
-				"userName": "zhangsan",
+				"addressId": "20005",
+				"userName": "zhangsan5",
 				"streetName": "中山市东区朗晴轩3楼",
 				"postCode": "100001",
 				"tel": 123456,

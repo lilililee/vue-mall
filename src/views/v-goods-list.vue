@@ -438,6 +438,11 @@
 
 				@media (max-width: 500px) {
 					width: 50%;
+
+					.content {
+						border-width: 1px;
+					}
+					
 					
 				}
 			}

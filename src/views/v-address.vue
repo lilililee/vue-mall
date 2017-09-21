@@ -262,5 +262,15 @@
 				color: $c2;
 			}
 		}
+
+		@media(max-width: 768px) {
+			.title {
+				text-align: center;
+			}
+
+			.list li {
+				width: 100%;
+			}
+		}
 	}
 </style>

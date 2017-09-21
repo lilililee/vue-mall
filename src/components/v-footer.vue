@@ -1,7 +1,7 @@
 <template>
 	<footer class="footer">
 		<div class="container">
-			<span class="copyright">Copyright © 2017 IMooc All Rights Reserved.</span>
+			<span class="copyright">Copyright © Lilililee</span>
 			<a href="#">About Us</a>
 			<a href="#">Terms & Conditions</a>
 			<a href="#">Privacy Policy</a>

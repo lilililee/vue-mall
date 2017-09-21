@@ -159,9 +159,16 @@
 			margin-left: -18px;
 
 			img {
-				// height: 67px;
-				margin: 0px 0 0 13px;
+				height: 59px;
+				margin: 10px 0 0 13px;
+
+				@media (max-width: 768px) {
+					height: 52px;
+					margin: 15px 0 0 24px;
+				}
 			}
+
+
 		}
 
 
